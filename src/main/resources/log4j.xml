@@ -12,7 +12,7 @@
 	</appender>
 
 	<appender name="file-appender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/export/Logs/excitation.jiashuangkuaizi.com/business.log" />
+		<param name="File" value="${log_dir}/business.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss\} %-5p] [%t] [%c:%L] %m%n" />
 		</layout>
