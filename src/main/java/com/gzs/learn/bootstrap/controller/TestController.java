@@ -13,8 +13,13 @@ public class TestController {
     private TestService testService;
 
     @RequestMapping("testParallel")
-    public String testParallel() throws Exception {
+    public String testParallel1() throws Exception {
         return testService.testParall();
+    }
+
+    @RequestMapping("testParallel2")
+    public String testParallel2() throws Exception {
+        return testService.testParall2();
     }
 
     @RequestMapping("testSequence")
@@ -25,5 +30,10 @@ public class TestController {
     @RequestMapping("testAsync")
     public String testAsync() throws Exception {
         return testService.testAsync();
+    }
+
+    @RequestMapping("testAsync2")
+    public String testAsync2() throws Exception {
+        return testService.testAsync2();
     }
 }

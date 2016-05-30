@@ -18,12 +18,27 @@ public class TestService {
     public static final String URL1 = "http://uapi1.jiashuangkuaizi.com/test2/a1";
     public static final String URL2 = "http://uapi1.jiashuangkuaizi.com/test2/a2";
     public static final String URL3 = "http://uapi1.jiashuangkuaizi.com/test2/a3";
+    public static final String URL4 = "http://uapi1.jiashuangkuaizi.com/test2/a4";
+    public static final String URL5 = "http://uapi1.jiashuangkuaizi.com/test2/a5";
 
     public String testParall() throws Exception {
         List<ParallelHandler> handlers = new ArrayList<>();
         handlers.add(() -> WebUtil.doGet(URL1, String.class).entity);
         handlers.add(() -> WebUtil.doGet(URL2, String.class).entity);
+        handlers.add(() -> WebUtil.doGet(URL5, String.class).entity);
+
+        List<Object> list = ParallelExecuteEngine.parallelExecute(handlers);
+
+        return list.stream().map(obj -> obj.toString()).collect(Collectors.joining());
+    }
+
+    public String testParall2() throws Exception {
+        List<ParallelHandler> handlers = new ArrayList<>();
+        handlers.add(() -> WebUtil.doGet(URL1, String.class).entity);
+        handlers.add(() -> WebUtil.doGet(URL2, String.class).entity);
         handlers.add(() -> WebUtil.doGet(URL3, String.class).entity);
+        handlers.add(() -> WebUtil.doGet(URL4, String.class).entity);
+        handlers.add(() -> WebUtil.doGet(URL5, String.class).entity);
 
         List<Object> list = ParallelExecuteEngine.parallelExecute(handlers);
 
@@ -34,7 +49,21 @@ public class TestService {
         List<Future<HttpResponse>> list = new ArrayList<>();
         list.add(AsyncWebUtil.doGet(URL1));
         list.add(AsyncWebUtil.doGet(URL2));
+        list.add(AsyncWebUtil.doGet(URL5));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            sb.append(EntityUtils.toString(list.get(i).get().getEntity()));
+        }
+        return sb.toString();
+    }
+
+    public String testAsync2() throws Exception {
+        List<Future<HttpResponse>> list = new ArrayList<>();
+        list.add(AsyncWebUtil.doGet(URL1));
+        list.add(AsyncWebUtil.doGet(URL2));
         list.add(AsyncWebUtil.doGet(URL3));
+        list.add(AsyncWebUtil.doGet(URL4));
+        list.add(AsyncWebUtil.doGet(URL5));
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             sb.append(EntityUtils.toString(list.get(i).get().getEntity()));
@@ -44,7 +73,8 @@ public class TestService {
 
     public String testSequence() throws Exception {
         List<String> results = Lists.newArrayList(WebUtil.doGet(URL1, String.class).entity,
-                WebUtil.doGet(URL2, String.class).entity, WebUtil.doGet(URL3, String.class).entity);
+                WebUtil.doGet(URL2, String.class).entity, WebUtil.doGet(URL3, String.class).entity,
+                WebUtil.doGet(URL4, String.class).entity, WebUtil.doGet(URL5, String.class).entity);
         return results.stream().map(obj -> obj.toString()).collect(Collectors.joining());
     }
 
