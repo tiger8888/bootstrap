@@ -25,7 +25,8 @@
 	</logger>
 
 	<root>
-		<priority value="${root_log_level}" />
+		<!-- <priority value="${root_log_level}" /> -->
+		<priority value="error" />
 		<appender-ref ref="${root_appender_ref}" />
 	</root>
 </log4j:configuration>

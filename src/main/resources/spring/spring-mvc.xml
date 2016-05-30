@@ -20,7 +20,7 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<context:component-scan base-package="com.gzs.learn.bootstrap" />
+	<context:component-scan base-package="com.gzs.learn.bootstrap.controller" />
 	<!-- static resources -->
 	<mvc:resources location="/static/" mapping="/static/**"></mvc:resources>
 

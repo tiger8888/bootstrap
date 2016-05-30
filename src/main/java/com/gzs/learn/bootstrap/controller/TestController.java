@@ -1,16 +1,29 @@
 package com.gzs.learn.bootstrap.controller;
 
-import org.springframework.stereotype.Controller;
+import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import com.gzs.learn.bootstrap.service.TestService;
+
+@RestController
 @RequestMapping("/")
 public class TestController {
+    @Resource
+    private TestService testService;
 
-    @ResponseBody
-    @RequestMapping("test")
-    public Object test() {
-        return "Hello world,this msg from spring mvc";
+    @RequestMapping("testParallel")
+    public String testParallel() throws Exception {
+        return testService.testParall();
+    }
+
+    @RequestMapping("testSequence")
+    public String testSequence() throws Exception {
+        return testService.testSequence();
+    }
+
+    @RequestMapping("testAsync")
+    public String testAsync() throws Exception {
+        return testService.testAsync();
     }
 }
