@@ -45,8 +45,13 @@ public class StreamTest {
                 .collect(Collectors.groupingBy(bar -> bar.getAge()));
 
         list2.forEach((key, list3) -> {
-            System.out.println(key + " " + list3.size());
+            //System.out.println(key + " " + list3.size());
         });
+    }
+
+    @Test
+    public void testMapReduce() {
+
     }
 }
 
