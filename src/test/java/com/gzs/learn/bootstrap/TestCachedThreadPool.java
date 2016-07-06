@@ -39,6 +39,6 @@ public class TestCachedThreadPool {
 class SimpleThreadFactory implements ThreadFactory {
     @Override
     public Thread newThread(Runnable r) {
-        return null;
+        return new Thread(r);
     }
 }

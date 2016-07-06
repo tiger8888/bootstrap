@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gzs.learn.bootstrap.util.ApplicationUtil;
 
-//@RestController
-//@RequestMapping("test2")
+@RestController
+@RequestMapping("test2")
 public class TestController2 {
     private static final int A1_SLEEP = Integer.parseInt(ApplicationUtil.getInstance().getProperty("a1_sleep"));
     private static final int A2_SLEEP = Integer.parseInt(ApplicationUtil.getInstance().getProperty("a2_sleep"));

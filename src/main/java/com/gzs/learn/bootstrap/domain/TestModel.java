@@ -3,13 +3,10 @@ package com.gzs.learn.bootstrap.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class TestModel implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer id;
     private String name;
-    @JsonIgnore
-    // @ApiModelProperty(hidden = true, readOnly = true)
     private Date date;
 
     public Integer getId() {
