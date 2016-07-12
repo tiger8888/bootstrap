@@ -1,29 +1,34 @@
 package com.gzs.learn.bootstrap.concurrent;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.locks.LockSupport;
-
-import org.apache.commons.lang3.time.DateFormatUtils;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import org.junit.Test;
 
 public class WaitTest {
+    private static final int THREAD_COUNT = 4;
 
     @Test
     public void testWaitNotify() {
-        Object lock = new Object();
+        Lock lock = new ReentrantLock();
+
         List<Thread> waitThreads = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < THREAD_COUNT; i++) {
             Thread waitThread = new WaitThread(lock);
+            waitThread.setName("lock-thread-" + i);
             waitThread.start();
             waitThreads.add(waitThread);
         }
-        Thread notifyThread = new NotifyThread(waitThreads);
-
-        notifyThread.start();
         try {
-            notifyThread.join();
+            for (int i = 0; i < waitThreads.size(); i++) {
+                Thread t = waitThreads.get(i);
+                if (i % 2 == 0) {
+                    // interrupt thread
+                    t.interrupt();
+                }
+            }
             for (Thread t : waitThreads) {
                 t.join();
             }
@@ -34,9 +39,9 @@ public class WaitTest {
 }
 
 class WaitThread extends Thread {
-    private Object lock;
+    private Lock lock;
 
-    public WaitThread(Object lock) {
+    public WaitThread(Lock lock) {
         this.lock = lock;
     }
 
@@ -45,36 +50,31 @@ class WaitThread extends Thread {
         if (lock == null) {
             return;
         }
-        int len = 10;
-        while (len > 0) {
-            LockSupport.park(lock);
+        try {
+            lock.lockInterruptibly();
             String threadName = Thread.currentThread().getName();
-            System.out.println(threadName + " recv notify for lock:" + DateFormatUtils.format(new Date(), "HH:mm:ss"));
-            len--;
+            System.out.println(threadName);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
         }
     }
 }
 
-class NotifyThread extends Thread {
-    private List<Thread> locakThreads;
+class WaitThreadWithTryLock extends Thread {
+    private Lock lock;
 
-    public NotifyThread(List<Thread> lockThreads) {
-        this.locakThreads = lockThreads;
+    public WaitThreadWithTryLock(Lock lock) {
+        this.lock = lock;
     }
 
     @Override
     public void run() {
-        int len = 10;
-        while (len > 0) {
-            try {
-                for (int i = 0; i < locakThreads.size(); i++) {
-                    LockSupport.unpark(locakThreads.get(i));
-                    Thread.sleep(1 * 1000);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            len--;
+        try {
+            lock.tryLock(10, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
