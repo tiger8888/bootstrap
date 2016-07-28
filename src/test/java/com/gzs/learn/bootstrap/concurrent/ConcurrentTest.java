@@ -261,6 +261,24 @@ public class ConcurrentTest {
             }
         }
     }
+
+    @Test
+    public void testThreadPoolExecutor() {
+        int count = 5;
+        ExecutorService executorService = Executors.newFixedThreadPool(count);
+        for (int i = 0; i < count; i++) {
+            new Thread(() -> executorService.submit(new TestThread())).start();
+        }
+        executorService.submit(new TestThread());
+        executorService.shutdown();
+    }
+}
+
+class TestThread implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("test 111");
+    }
 }
 
 class CopyOnWriteTest extends Thread {

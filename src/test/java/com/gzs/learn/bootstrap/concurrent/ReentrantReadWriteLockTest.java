@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-public class ReadWriteReentrantLockTest {
+public class ReentrantReadWriteLockTest {
     @Test
     public void testReadWriteLock() throws InterruptedException {
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock(false);

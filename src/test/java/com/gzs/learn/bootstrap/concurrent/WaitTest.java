@@ -2,6 +2,8 @@ package com.gzs.learn.bootstrap.concurrent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,6 +11,23 @@ import org.junit.Test;
 
 public class WaitTest {
     private static final int THREAD_COUNT = 4;
+
+    @Test
+    public void testXss() {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        int count = 0;
+        while (true && count < 10000000) {
+            try {
+                executorService.submit(() -> {
+                    System.out.println("");
+                });
+                count++;
+            } catch (Exception e) {
+                break;
+            }
+        }
+        System.out.println("no is:" + count);
+    }
 
     @Test
     public void testWaitNotify() {

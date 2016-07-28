@@ -2,6 +2,10 @@ package com.gzs.learn.bootstrap.concurrent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,6 +13,21 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.junit.Test;
 
 public class ConditionTest {
+
+    @Test
+    public void testThreadPoolExecutor() throws Exception, ExecutionException {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        Future<Integer> future = executorService.submit(() -> {
+            try {
+                Thread.sleep(1000);
+                return 1;
+            } catch (Exception e) {
+                return 2;
+            }
+        });
+
+        System.out.println(future.get());
+    }
 
     @Test
     public void testCondition() throws InterruptedException {
@@ -44,7 +63,9 @@ public class ConditionTest {
         for (Thread t : threads) {
             t.start();
         }
-        Thread.sleep(100);
+        for (Thread t : threads) {
+            t.join();
+        }
     }
 }
 
